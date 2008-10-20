@@ -1,0 +1,6 @@
+require "FlexUtils"
+require "Adl"
+require "Asc"
+require "Compc"
+require "Mxmlc"
+require "TestRunner"
