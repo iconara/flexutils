@@ -15,6 +15,7 @@ module FlexUtils
                 :verbose_stacktraces,   # boolean, default true
                 :use_network,           # boolean, default true
                 :incremental,           # boolean, default false
+                :target_player,         # string, default "9.0.0"
                 :defines,               # hash name => value
                 :keep_as3_metadata,     # list of metadata names
                 :warnings,              # hash warning_name => boolean (warning_name example "show-actionscript-warnings")
@@ -29,6 +30,8 @@ module FlexUtils
       @strict              = true
       @verbose_stacktraces = true
       @incremental         = false
+      
+      @target_player = "9.0.0"
     
       @source_path           = []
       @library_path          = []
@@ -86,6 +89,8 @@ module FlexUtils
       all_flags << "-verbose-stacktraces" if @verbose_stacktraces
       all_flags << "-use-network"         if @use_network
       all_flags << "-incremental"         if @incremental
+      
+      all_flags << "-target-player #{@target_player}"
 
       all_flags << (@defines.keys.map  { |item| "-define+=#{item},#{@defines[item]}" }.join(" "))
       all_flags << (@warnings.keys.map { |item| "-#{item}=#{@warnings[item]}" }.join(" "))
