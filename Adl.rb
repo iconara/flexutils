@@ -28,25 +28,25 @@ module FlexUtils
   
     def generate_descriptor
       return <<-stop
-  <?xml version="1.0"?>
-      
-  <application xmlns="http://ns.adobe.com/air/application/1.0">
-  	<id>net.iconara.tmp</id>
-  	<version>1.0</version>
-  	<filename>#{@title}</filename>
-  	<initialWindow>
-  		<title>#{@title}</title>
-  		<content>#{File.basename(@swf)}</content>
-  		<systemChrome>#{@system_chrome}</systemChrome>
-  	    <transparent>#{@transparent}</transparent>
-  	    <visible>#{@visible}</visible>
-  		<width>#{@width}</width> 
-  		<height>#{@height}</height>
-      <x>#{@x}</x>
-      <y>#{@y}</y>
-  	</initialWindow>
-  </application>
-  stop
+<?xml version="1.0"?>
+    
+<application xmlns="http://ns.adobe.com/air/application/1.5">
+	<id>net.iconara.tmp</id>
+	<version>1.0</version>
+	<filename>#{@title}</filename>
+	<initialWindow>
+		<title>#{@title}</title>
+		<content>#{File.basename(@swf)}</content>
+		<systemChrome>#{@system_chrome}</systemChrome>
+	    <transparent>#{@transparent}</transparent>
+	    <visible>#{@visible}</visible>
+		<width>#{@width}</width> 
+		<height>#{@height}</height>
+    <x>#{@x}</x>
+    <y>#{@y}</y>
+	</initialWindow>
+</application>
+stop
     end
   
     def run!( extra_args=[], &block )
