@@ -11,7 +11,8 @@ module FlexUtils
                 :x,
                 :y,
                 :system_chrome,
-                :arguments
+                :arguments,
+                :descriptor
 
     def initialize( swf )
       @swf           = swf
@@ -55,16 +56,20 @@ stop
       dir = File.dirname(@swf)
     
       Dir.chdir(dir)
+      
+      temporary_descriptor = @descriptor == nil
     
-      descriptorName = "temporary-application.xml"
-    
-      descriptor = File.new(descriptorName, "w")
-      descriptor.puts(generate_descriptor)
-      descriptor.close
+      if temporary_descriptor
+        @descriptor = "temporary-application.xml"
+
+        descriptor = File.new(descriptorName, "w")
+        descriptor.puts(generate_descriptor)
+        descriptor.close
+      end
     
       args = (@arguments + extra_args).join(" ")
     
-      command_string = "#{command_path 'adl'} #{descriptorName} -- #{args}"
+      command_string = "#{command_path 'adl'} #{@descriptor} -- #{args}"
       
       puts command_string
         
@@ -72,7 +77,7 @@ stop
       
       yield($?) if block_given?
     
-      File.delete(descriptorName)
+      File.delete(descriptorName) if temporary_descriptor
     
       Dir.chdir(currentDir)
     end
