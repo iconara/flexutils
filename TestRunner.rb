@@ -20,6 +20,8 @@ module FlexUtils
           #File.read("data.txt")?
           output = File.open(log_file) { |f| f.read }
           
+          puts output
+          
           rm log_file
         end
         

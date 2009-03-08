@@ -49,9 +49,17 @@ module FlexUtils
 </application>
 stop
     end
+    
+    def self.run( *args )
+      c = self.new(*args)
+      
+      yield c
+      
+      c.run!
+    end
   
     def run!( extra_args=[], &block )
-      currentDir = Dir.pwd
+      current_dir = Dir.pwd
     
       dir = File.dirname(@swf)
     
@@ -62,7 +70,7 @@ stop
       if temporary_descriptor
         @descriptor = "temporary-application.xml"
 
-        descriptor = File.new(descriptorName, "w")
+        descriptor = File.new(@descriptor, "w")
         descriptor.puts(generate_descriptor)
         descriptor.close
       end
@@ -77,9 +85,9 @@ stop
       
       yield($?) if block_given?
     
-      File.delete(descriptorName) if temporary_descriptor
+      File.delete(@descriptor) if temporary_descriptor
     
-      Dir.chdir(currentDir)
+      Dir.chdir(current_dir)
     end
 
   end
