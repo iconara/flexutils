@@ -1,5 +1,6 @@
 require "FlexUtils"
 require "Adl"
+require "Adt"
 require "Asc"
 require "Compc"
 require "Mxmlc"
