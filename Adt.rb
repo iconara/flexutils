@@ -36,7 +36,7 @@ module FlexUtils
       
       puts command_string
       
-      `#{command_string} 2>&1`
+      `#{command_string}`
       
       Dir.chdir(current_dir)
     end
