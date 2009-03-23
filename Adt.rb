@@ -12,6 +12,16 @@ module FlexUtils
       @files = []
     end
     
+    def self.app_version( descriptor_path )
+      require 'rexml/document'
+
+      doc = REXML::Document.new(File.new(descriptor_path))
+
+      version_xpath = '/application/version/text()'
+
+      REXML::XPath.first(doc, version_xpath).to_s
+    end
+    
     def self.package
       c = self.new
       
