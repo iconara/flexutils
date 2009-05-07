@@ -1,5 +1,3 @@
-require 'rake/tasklib'
-
 module FlexUtils
 
   class Asc
