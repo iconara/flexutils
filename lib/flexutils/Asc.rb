@@ -101,9 +101,7 @@ module FlexUtils
     
       command_string = "#{@compiler} #{all_flags}"
       
-      puts command_string
-      
-      output = `#{command_string} 2>&1` # redirect stderr to stdout
+      output = execute_command command_string
       
       if block_given?
         yield($?, output)

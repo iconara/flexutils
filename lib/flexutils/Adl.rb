@@ -78,10 +78,8 @@ stop
       args = (@arguments + extra_args).join(" ")
     
       command_string = "#{command_path 'adl'} #{@descriptor} -- #{args}"
-      
-      puts command_string
         
-      `#{command_string}`
+      execute_command command_string
       
       yield($?) if block_given?
     

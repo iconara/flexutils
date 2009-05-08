@@ -44,9 +44,7 @@ module FlexUtils
 
       command_string = "#{command_path 'adt'} -package -storetype pkcs12 -keystore #{keyfile} -storepass #{@keypass} #{name} #{descriptor} #{files}"
       
-      puts command_string
-      
-      `#{command_string}`
+      execute_command command_string
       
       Dir.chdir(current_dir)
     end

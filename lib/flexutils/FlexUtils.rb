@@ -8,4 +8,16 @@ module FlexUtils
     end
   end
   
+  def execute_command( command_str, options = { } )
+    operative_options = standard_options.merge(options)
+    
+    puts command_str if operative_options[:verbose]
+    
+    %x(#{command_str} 2>&1)
+  end
+  
+  def standard_options
+    {:verbose => true}
+  end
+  
 end
