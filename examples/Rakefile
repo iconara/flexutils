@@ -1,0 +1,62 @@
+# add the lib directory to the load path so that you can run this without having to install FlexUtils
+$: << File.dirname(__FILE__) + '/../lib'
+
+# ---
+
+require 'rake/clean'
+require 'flexutils'
+
+# ---
+
+include FlexUtils
+
+# ---
+
+ENV['FLEX_HOME'] ||= '/Developer/Flex/flex-sdk-3.2'
+
+# ---
+
+MAIN_SWF    = 'build/Main.swf'
+EXAMPLE_SWC = 'dist/example.swc'
+
+# ---
+
+CLEAN.include(MAIN_SWF + '.cache')
+
+CLOBBER.include('build')
+CLOBBER.include('dist')
+
+# ---
+
+task :default => [:init, MAIN_SWF, EXAMPLE_SWC]
+
+task :init do
+  mkdir_p 'build'
+  mkdir_p 'dist'
+end
+
+file MAIN_SWF => FileList['src/**/*.mxml', 'src/**/*.as'] do |t|
+  Mxmlc.compile(t.name, 'src/Main.mxml') do |conf|
+    conf.debug           = true
+    conf.incremental     = true
+    conf.theme_files     = FileList['theme/*.css']
+    conf.locale          = ['en_US']
+    conf.source_path     = ['src', 'locale/{locale}', 'theme']
+    conf.library_path    = ['lib']
+    conf.warnings        = {'show-unused-type-selector-warnings' => false}
+    conf.target_player   = '10'
+    conf.fail_on_warning = true
+  end
+end
+
+file EXAMPLE_SWC => FileList['src/SomeClass.as'] do |t|
+  classes = t.prerequisites.map do |path|
+    # remove source path and the file extention and turn directory structure into package structure
+    path.gsub('src/', '').gsub(/\.\w+$/, '').gsub('/', '.')
+  end
+  
+  Compc.compile(t.name) do |conf|
+    conf.source_path     = ['src']
+    conf.include_classes = classes
+  end
+end
