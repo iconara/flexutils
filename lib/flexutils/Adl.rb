@@ -1,6 +1,6 @@
 module FlexUtils
 
-  class Adl
+  class Adl < AbstractTool
 
     attr_writer :swf,
                 :title,

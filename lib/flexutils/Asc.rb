@@ -1,6 +1,6 @@
 module FlexUtils
 
-  class Asc
+  class Asc < AbstractTool
 
     attr_writer :output,                # output file path
                 :source_path,           # list

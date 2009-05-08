@@ -1,6 +1,6 @@
 module FlexUtils
 
-  class Adt
+  class Adt < AbstractTool
     
     attr_writer :descriptor,
                 :keyfile,
