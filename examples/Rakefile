@@ -16,7 +16,11 @@ ENV['FLEX_HOME'] ||= '/Developer/Flex/flex-sdk-3.2'
 
 # ---
 
+SOURCE_FILES = FileList['src/**/*.mxml', 'src/**/*.as']
+SOURCE_FILES.exclude('**/Test*.as')
+
 MAIN_SWF    = 'build/Main.swf'
+TESTS_SWF   = 'build/Tests.swf'
 EXAMPLE_SWC = 'dist/example.swc'
 
 # ---
@@ -28,18 +32,39 @@ CLOBBER.include('dist')
 
 # ---
 
-task :default => [:init, MAIN_SWF, EXAMPLE_SWC]
+task :default => [:init, :test, MAIN_SWF, EXAMPLE_SWC]
 
 task :init do
   mkdir_p 'build'
   mkdir_p 'dist'
 end
 
-file MAIN_SWF => FileList['src/**/*.mxml', 'src/**/*.as'] do |t|
+task :test => TESTS_SWF do |t|
+  TestRunner.run(t.name) do |conf|
+    conf.title = 'Tests'
+    conf.exit_on_complete = false
+    conf.fail_on_error    = true
+  end
+end
+
+file MAIN_SWF => SOURCE_FILES do |t|
   Mxmlc.compile(t.name, 'src/Main.mxml') do |conf|
     conf.debug           = true
     conf.incremental     = true
     conf.theme_files     = FileList['theme/*.css']
+    conf.locale          = ['en_US']
+    conf.source_path     = ['src', 'locale/{locale}', 'theme']
+    conf.library_path    = ['lib']
+    conf.warnings        = {'show-unused-type-selector-warnings' => false}
+    conf.target_player   = '10'
+    conf.fail_on_warning = true
+  end
+end
+
+file TESTS_SWF => SOURCE_FILES + FileList['**/Test*.as'] do |t|
+  Mxmlc.compile(t.name, 'src/Tests.mxml') do |conf|
+    conf.debug           = true
+    conf.incremental     = true
     conf.locale          = ['en_US']
     conf.source_path     = ['src', 'locale/{locale}', 'theme']
     conf.library_path    = ['lib']
