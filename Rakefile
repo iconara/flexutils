@@ -1,6 +1,8 @@
 require 'rake/testtask'
 require 'rake/clean'
 
+require 'spec/rake/spectask'
+
 
 CLOBBER.include('dist')
 
@@ -20,9 +22,9 @@ file 'dist/flexutils.rb' => FileList['lib/flexutils/*.rb'] do |t|
   rm 'lib/init.rb'
 end
 
-desc "Run all the tests"
-Rake::TestTask.new do |t|
-    t.libs << 'test'
-    t.test_files = FileList['test/test_*.rb']
-    t.verbose = false
+desc "Run the specifications"
+Spec::Rake::SpecTask.new('spec') do |t|
+  t.spec_files = FileList['spec/*_spec.rb']
+  t.libs       = [File.dirname(__FILE__) + '/lib']
+  t.spec_opts  = ['--require', 'lib/flexutils', '--format', 'specdoc', '--color']
 end

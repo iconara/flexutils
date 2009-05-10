@@ -70,6 +70,20 @@ module FlexUtils
       @compiler = command_path @compiler
     end
   
+    def defines_str
+      defines = @defines.keys.map do |item|
+        value = if @defines[item] =~ /\s/
+          "'#{@defines[item]}'"
+        else
+          @defines[item]
+        end
+        
+        "-define+=#{item},#{value}"
+      end
+      
+      defines.join(' ')
+    end
+  
     def compiler_flags
       all_flags = []
     
@@ -78,7 +92,7 @@ module FlexUtils
       all_flags << "-source-path+=#{@source_path.join(",")}"                     unless @source_path.empty?
       all_flags << "-library-path+=#{@library_path.join(",")}"                   unless @library_path.empty?
       all_flags << "-external-library-path+=#{@external_library_path.join(",")}" unless @external_library_path.empty?
-      all_flags << "-locale=#{@locale.join(",")}"                               unless @locale.empty?
+      all_flags << "-locale=#{@locale.join(",")}"                                unless @locale.empty?
       all_flags << "-keep-as3-metadata=#{@keep_as3_metadata.join(",")}"          unless @keep_as3_metadata.empty?
 
       all_flags << "-debug"               if @debug
@@ -90,18 +104,21 @@ module FlexUtils
       
       all_flags << "-target-player #{@target_player}"
 
-      all_flags << (@defines.keys.map  { |item| "-define+=#{item},#{@defines[item]}" }.join(" "))
       all_flags << (@warnings.keys.map { |item| "-#{item}=#{@warnings[item]}" }.join(" "))
+
+      all_flags << defines_str
       
       all_flags
     end
   
-    def compile!
+    def command_string
       all_flags = compiler_flags.delete_if { |item| (item.nil? || item =~ /^\s*$/) }.join(" ")
-    
-      command_string = "#{@compiler} #{all_flags}"
       
-      output = execute_command command_string
+      "#{@compiler} #{all_flags}"
+    end
+    
+    def compile!
+      output = execute_command
       
       if block_given?
         yield($?, output)

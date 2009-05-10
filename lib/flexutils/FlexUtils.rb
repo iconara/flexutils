@@ -9,8 +9,12 @@ module FlexUtils
         File.join(ENV['FLEX_HOME'], 'bin', command_name)
       end
     end
+    
+    def command_string
+      
+    end
   
-    def execute_command( command_str, options = { } )
+    def execute_command( options = { } )
       operative_options = standard_options.merge(options)
     
       puts command_str if operative_options[:verbose]
