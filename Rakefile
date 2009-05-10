@@ -7,7 +7,7 @@ require 'spec/rake/spectask'
 CLOBBER.include('dist')
 
 
-task :default => [:test, :rba]
+task :default => [:spec, :rba]
 
 desc 'Package the FlexUtils scripts as RBA'
 task :rba => 'dist/flexutils.rb'
@@ -23,8 +23,10 @@ file 'dist/flexutils.rb' => FileList['lib/flexutils/*.rb'] do |t|
 end
 
 desc "Run the specifications"
-Spec::Rake::SpecTask.new('spec') do |t|
-  t.spec_files = FileList['spec/*_spec.rb']
-  t.libs       = [File.dirname(__FILE__) + '/lib']
-  t.spec_opts  = ['--require', 'lib/flexutils', '--format', 'specdoc', '--color']
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_files      = FileList['spec/*_spec.rb']
+  t.libs            = [File.dirname(__FILE__) + '/lib']
+  t.spec_opts       = ['--require', 'lib/flexutils', '--format', 'specdoc', '--color']
+  t.fail_on_error   = true
+  t.failure_message = 'Tests failed'
 end
