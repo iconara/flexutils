@@ -57,8 +57,18 @@ stop
       
       c.run!
     end
+    
+    def command_string
+      @extra_args ||= [ ]
+      
+      args = (@arguments + @extra_args).join(" ")
+      
+      "#{command_path 'adl'} #{@descriptor} -- #{args}"
+    end
   
     def run!( extra_args=[], &block )
+      @extra_args = extra_args
+      
       current_dir = Dir.pwd
     
       dir = File.dirname(@swf)
@@ -74,12 +84,8 @@ stop
         descriptor.puts(generate_descriptor)
         descriptor.close
       end
-    
-      args = (@arguments + extra_args).join(" ")
-    
-      command_string = "#{command_path 'adl'} #{@descriptor} -- #{args}"
         
-      execute_command command_string
+      execute_command
       
       yield($?) if block_given?
     

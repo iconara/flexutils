@@ -30,6 +30,20 @@ module FlexUtils
       c.package!
     end
     
+    def command_string
+      unless @keyfile && @keypass && @name && @descriptor && @files
+        raise ArgumentError, 'Missing arguments'
+      end
+
+      command    = command_path 'adt'
+      keyfile    = @keyfile.gsub(File.dirname(@descriptor) + '/', '')
+      descriptor = File.basename(@descriptor)
+      name       = File.basename(@name).gsub(/\.air$/, '')
+      files      = (@files || []).map { |f| f.gsub(dir + '/', '') }.join(' ')
+        
+      "#{command} -package -storetype pkcs12 -keystore #{keyfile} -storepass #{@keypass} #{name} #{descriptor} #{files}"
+    end
+    
     def package!
       current_dir = Dir.pwd
     
@@ -37,14 +51,7 @@ module FlexUtils
       
       Dir.chdir(dir)
       
-      descriptor = File.basename(@descriptor)
-      name       = File.basename(@name).gsub(/\.air$/, '')
-      keyfile    = @keyfile.gsub(dir + '/', '')
-      files      = (@files || []).map { |f| f.gsub(dir + '/', '') }.join(' ')
-
-      command_string = "#{command_path 'adt'} -package -storetype pkcs12 -keystore #{keyfile} -storepass #{@keypass} #{name} #{descriptor} #{files}"
-      
-      execute_command command_string
+      execute_command
       
       Dir.chdir(current_dir)
     end
