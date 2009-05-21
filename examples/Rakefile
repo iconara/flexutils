@@ -12,7 +12,7 @@ include FlexUtils
 
 # ---
 
-ENV['FLEX_HOME'] ||= '/Developer/Flex/flex-sdk-3.2'
+ENV['FLEX_HOME'] ||= '/Developer/Flex/flex-sdk-3.3'
 
 # ---
 
@@ -32,6 +32,7 @@ CLOBBER.include('dist')
 
 # ---
 
+desc "Runs the tests and compiles the SWF and the SWC"
 task :default => [:init, :test, MAIN_SWF, EXAMPLE_SWC]
 
 task :init do
@@ -39,6 +40,7 @@ task :init do
   mkdir_p 'dist'
 end
 
+desc "Runs the tests"
 task :test => TESTS_SWF do |t|
   TestRunner.run(t.name) do |conf|
     conf.title = 'Tests'
