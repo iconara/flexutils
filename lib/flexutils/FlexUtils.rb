@@ -3,16 +3,17 @@ module FlexUtils
   class AbstractTool
   
     def command_path( command_name )
-      if RUBY_PLATFORM =~ /mswin/
-        ext = '.exe'
+      if ENV['FLEX_HOME']
+        File.join(ENV['FLEX_HOME'], 'bin', command_name + command_extension)
       else
-        ext = ''
+        command_name + command_extension
       end
-      
-      if ENV['FLEX_HOME'].nil?
-        return command_name + ext
-      else
-        File.join(ENV['FLEX_HOME'], 'bin', command_name + ext)
+    end
+
+    def command_extension
+      case RUBY_PLATFORM
+        when /mswin/: '.exe'
+        else: ''
       end
     end
     
