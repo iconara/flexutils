@@ -13,7 +13,7 @@ module FlexUtils
     def command_extension
       case RUBY_PLATFORM
         when /mswin/: '.exe'
-        else: ''
+        else ''
       end
     end
     
