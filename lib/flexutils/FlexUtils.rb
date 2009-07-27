@@ -4,7 +4,7 @@ module FlexUtils
   
     def command_path( command_name )
       if ENV['FLEX_HOME']
-        File.join(ENV['FLEX_HOME'], 'bin', command_name + command_extension)
+        "'" + File.join(ENV['FLEX_HOME'], 'bin', command_name + command_extension) + "'"
       else
         command_name + command_extension
       end
