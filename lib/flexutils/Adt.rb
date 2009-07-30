@@ -51,7 +51,7 @@ module FlexUtils
       
       Dir.chdir(dir)
       
-      execute_command
+      puts execute_command
       
       Dir.chdir(current_dir)
     end
